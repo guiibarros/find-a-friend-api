@@ -3,6 +3,8 @@ import { compare } from 'bcryptjs'
 
 import { OrgsRepository } from '@/repositories/orgs-repository'
 
+import { InvalidCredentialsError } from './errors/invalid-credentials-error'
+
 interface AuthenticateUseCaseRequest {
   phone: string
   password: string
@@ -22,13 +24,13 @@ export class AuthenticateUseCase {
     const org = await this.orgsRepository.findByPhone(phone)
 
     if (!org) {
-      throw new Error('Phone or password incorrect.')
+      throw new InvalidCredentialsError()
     }
 
     const doesPasswordMatches = await compare(password, org.password_hash)
 
     if (!doesPasswordMatches) {
-      throw new Error('Phone or password incorrect.')
+      throw new InvalidCredentialsError()
     }
 
     return {

@@ -3,6 +3,8 @@ import { hash } from 'bcryptjs'
 
 import { OrgsRepository } from '@/repositories/orgs-repository'
 
+import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
+
 interface RegisterOrgUseCaseRequest {
   title: string
   phone: string
@@ -32,7 +34,7 @@ export class RegisterOrgUseCase {
     const orgAlreadyExists = await this.orgsRepository.findByPhone(phone)
 
     if (orgAlreadyExists) {
-      throw new Error('Org already exists.')
+      throw new OrgAlreadyExistsError()
     }
 
     const password_hash = await hash(password, 6)
