@@ -1,16 +1,16 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { InMemoryOrgsRepositories } from '@/repositories/in-memory/in-memory-orgs-repositories'
+import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 
-import { RegisterOrg } from './register-org'
+import { RegisterOrgUseCase } from './register-org'
 
-let orgsRepository: InMemoryOrgsRepositories
-let sut: RegisterOrg
+let orgsRepository: InMemoryOrgsRepository
+let sut: RegisterOrgUseCase
 
 describe('Register org use case', () => {
   beforeEach(() => {
-    orgsRepository = new InMemoryOrgsRepositories()
-    sut = new RegisterOrg(orgsRepository)
+    orgsRepository = new InMemoryOrgsRepository()
+    sut = new RegisterOrgUseCase(orgsRepository)
   })
 
   it('should be able to register a org', async () => {

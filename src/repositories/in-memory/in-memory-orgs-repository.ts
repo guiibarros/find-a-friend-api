@@ -1,9 +1,9 @@
 import { Org, Prisma } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
 
-import { OrgsRepositories } from '../orgs-repositories'
+import { OrgsRepository } from '../orgs-repository'
 
-export class InMemoryOrgsRepositories implements OrgsRepositories {
+export class InMemoryOrgsRepository implements OrgsRepository {
   public items: Org[] = []
 
   async findByPhone(phone: string) {

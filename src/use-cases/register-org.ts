@@ -1,9 +1,9 @@
 import { Org } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
-import { OrgsRepositories } from '@/repositories/orgs-repositories'
+import { OrgsRepository } from '@/repositories/orgs-repository'
 
-interface RegisterOrgRequest {
+interface RegisterOrgUseCaseRequest {
   title: string
   phone: string
   password: string
@@ -13,12 +13,12 @@ interface RegisterOrgRequest {
   city: string
 }
 
-interface RegisterOrgResponse {
+interface RegisterOrgUseCaseResponse {
   org: Org
 }
 
-export class RegisterOrg {
-  constructor(private readonly orgsRepository: OrgsRepositories) {}
+export class RegisterOrgUseCase {
+  constructor(private readonly orgsRepository: OrgsRepository) {}
 
   async execute({
     title,
@@ -28,7 +28,7 @@ export class RegisterOrg {
     address,
     uf,
     city,
-  }: RegisterOrgRequest): Promise<RegisterOrgResponse> {
+  }: RegisterOrgUseCaseRequest): Promise<RegisterOrgUseCaseResponse> {
     const orgAlreadyExists = await this.orgsRepository.findByPhone(phone)
 
     if (orgAlreadyExists) {
