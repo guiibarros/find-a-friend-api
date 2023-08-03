@@ -10,6 +10,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Age {
+  PUPPY
+  ADOLESCENT
+  ADULT
+  SENIOR
+}
+
+enum Size {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum Rate {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Pet {
+  id         String    @id @default(uuid())
+  name       String
+  about      String
+  adopted_at DateTime?
+
+  age          Age
+  size         Size
+  energy       Rate
+  independency Rate
+  environment  Size
+
+  imagesUrl    String[]
+  requirements String[]
+
+  @@map("pets")
+}
+
 model Org {
   id            String @id @default(uuid())
   title         String
