@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 
 import { AuthenticateUseCase } from './authenticate'
+import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
 let orgsRepository: InMemoryOrgsRepository
 let sut: AuthenticateUseCase
@@ -39,7 +40,7 @@ describe('Authenticate use case', () => {
         phone: '999999999',
         password: '123456',
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 
   it('should not be able to authenticate with wrong password', async () => {
@@ -58,6 +59,6 @@ describe('Authenticate use case', () => {
         phone: '999999999',
         password: '654321',
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 })
