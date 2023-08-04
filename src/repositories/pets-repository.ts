@@ -20,4 +20,5 @@ export interface PetsRepository {
     query: QueryParams,
   ): Promise<Pet[]>
   create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
+  save(pet: Pet): Promise<Pet>
 }
