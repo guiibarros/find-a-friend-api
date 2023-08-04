@@ -10,6 +10,7 @@ interface SearchPetsUseCaseRequest {
   energy?: Rate
   independency?: Rate
   environment?: Size
+  page: number
 }
 
 interface SearchPetsUseCaseResponse {
@@ -22,11 +23,13 @@ export class SearchPetsUseCase {
   async execute({
     uf,
     city,
+    page,
     ...query
   }: SearchPetsUseCaseRequest): Promise<SearchPetsUseCaseResponse> {
     const pets = await this.petsRepository.searchManyByLocation(
       { uf, city },
       query,
+      page,
     )
 
     return {

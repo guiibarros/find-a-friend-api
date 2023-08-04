@@ -1,4 +1,4 @@
-import { $Enums, Pet, Prisma } from '@prisma/client'
+import { Pet, Prisma } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
 
 import { PetsRepository, LocationParams, QueryParams } from '../pets-repository'
@@ -19,24 +19,34 @@ export class InMemoryPetsRepository implements PetsRepository {
     return pet
   }
 
-  async searchManyByLocation(location: LocationParams, query: QueryParams) {
+  async searchManyByLocation(
+    location: LocationParams,
+    query: QueryParams,
+    page: number,
+  ) {
+    // Get orgs by location
     const orgs = this.orgsRepository.items.filter(
       (org) => org.uf === location.uf && org.city === location.city,
     )
 
-    const pets = this.items.filter((pet) => {
+    // Get pets by org & availability
+    let pets = this.items.filter((pet) => {
       return orgs.some((org) => org.id === pet.orgId) && !pet.adopted_at
     })
 
-    const filteredPets = pets.filter((pet) => {
-      return Object.entries(query).every((item) => {
-        const [key, value] = item as [keyof QueryParams, string]
+    // Optional filters
+    if (query) {
+      pets = pets.filter((pet) => {
+        return Object.entries(query).every((item) => {
+          const [key, value] = item as [keyof QueryParams, string]
 
-        return pet[key] === value
+          return pet[key] === value
+        })
       })
-    })
+    }
 
-    return filteredPets.length > 0 ? filteredPets : pets
+    // Paginated pets
+    return pets.slice((page - 1) * 20, page * 20)
   }
 
   async create(data: Prisma.PetUncheckedCreateInput) {

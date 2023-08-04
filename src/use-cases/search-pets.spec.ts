@@ -59,6 +59,7 @@ describe('Search pets use case', () => {
     const { pets } = await sut.execute({
       uf: 'PE',
       city: 'Recife',
+      page: 1,
     })
 
     expect(pets).toEqual([
@@ -67,6 +68,36 @@ describe('Search pets use case', () => {
         name: 'Alfred',
         adopted_at: null,
       }),
+    ])
+  })
+
+  it('should be able to search paginated available pets in a location', async () => {
+    for (let i = 1; i <= 22; i++) {
+      await petsRepository.create({
+        id: `pet-id-${i}`,
+        name: 'Alfred',
+        about: 'puppy Alfred',
+        age: 'PUPPY',
+        size: 'SMALL',
+        energy: 'HIGH',
+        environment: 'LARGE',
+        independency: 'HIGH',
+        imagesUrl: ['image-01.jpg'],
+        requirements: ['Large place for the animal.'],
+        orgId: 'org-01',
+      })
+    }
+
+    const { pets } = await sut.execute({
+      uf: 'PE',
+      city: 'Recife',
+      page: 2,
+    })
+
+    expect(pets).toHaveLength(2)
+    expect(pets).toEqual([
+      expect.objectContaining({ id: 'pet-id-21' }),
+      expect.objectContaining({ id: 'pet-id-22' }),
     ])
   })
 
@@ -103,6 +134,7 @@ describe('Search pets use case', () => {
       city: 'Recife',
       environment: 'LARGE',
       age: 'ADOLESCENT',
+      page: 1,
     })
 
     expect(pets).toEqual([
