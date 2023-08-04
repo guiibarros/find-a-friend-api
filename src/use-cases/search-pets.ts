@@ -2,7 +2,7 @@ import { Age, Pet, Rate, Size } from '@prisma/client'
 
 import { PetsRepository } from '@/repositories/pets-repository'
 
-interface SearchAvailableUseCaseRequest {
+interface SearchPetsUseCaseRequest {
   uf: string
   city: string
   age?: Age
@@ -12,18 +12,18 @@ interface SearchAvailableUseCaseRequest {
   environment?: Size
 }
 
-interface SearchAvailableUseCaseResponse {
+interface SearchPetsUseCaseResponse {
   pets: Pet[]
 }
 
-export class SearchAvailableUseCase {
+export class SearchPetsUseCase {
   constructor(private readonly petsRepository: PetsRepository) {}
 
   async execute({
     uf,
     city,
     ...query
-  }: SearchAvailableUseCaseRequest): Promise<SearchAvailableUseCaseResponse> {
+  }: SearchPetsUseCaseRequest): Promise<SearchPetsUseCaseResponse> {
     const pets = await this.petsRepository.searchManyByLocation(
       { uf, city },
       query,
