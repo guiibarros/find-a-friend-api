@@ -44,6 +44,9 @@ model Pet {
   imagesUrl    String[]
   requirements String[]
 
+  orgId String
+  org   Org    @relation(fields: [orgId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   @@map("pets")
 }
 
@@ -52,10 +55,13 @@ model Org {
   title         String
   phone         String @unique
   password_hash String
-  cep           String
-  address       String
-  uf            String
-  city          String
+
+  cep     String
+  address String
+  uf      String
+  city    String
+
+  pets Pet[]
 
   @@map("orgs")
 }

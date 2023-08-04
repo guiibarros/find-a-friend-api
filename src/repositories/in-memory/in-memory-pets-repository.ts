@@ -6,7 +6,7 @@ import { PetsRepository } from '../pets-repository'
 export class InMemoryPetsRepository implements PetsRepository {
   public items: Pet[] = []
 
-  async create(data: Prisma.PetCreateInput) {
+  async create(data: Prisma.PetUncheckedCreateInput) {
     const pet: Pet = {
       id: randomUUID(),
       name: data.name,
@@ -19,6 +19,7 @@ export class InMemoryPetsRepository implements PetsRepository {
       imagesUrl: Array.isArray(data.imagesUrl) ? data.imagesUrl : [],
       requirements: Array.isArray(data.requirements) ? data.requirements : [],
       adopted_at: data.adopted_at ? new Date(data.adopted_at) : null,
+      orgId: data.orgId,
     }
 
     this.items.push(pet)
