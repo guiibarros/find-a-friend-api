@@ -3,15 +3,15 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 
 import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
-import { RegisterOrgUseCase } from './register-org'
+import { RegisterUseCase } from './register'
 
 let orgsRepository: InMemoryOrgsRepository
-let sut: RegisterOrgUseCase
+let sut: RegisterUseCase
 
 describe('Register org use case', () => {
   beforeEach(() => {
     orgsRepository = new InMemoryOrgsRepository()
-    sut = new RegisterOrgUseCase(orgsRepository)
+    sut = new RegisterUseCase(orgsRepository)
   })
 
   it('should be able to register a org', async () => {

@@ -3,18 +3,18 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pets-repository'
 
-import { SearchAvailablePetsUseCase } from './search-available-pets'
+import { SearchAvailableUseCase } from './search-available'
 
 let petsRepository: InMemoryPetsRepository
 let orgsRepository: InMemoryOrgsRepository
 
-let sut: SearchAvailablePetsUseCase
+let sut: SearchAvailableUseCase
 
 describe('Search available pets use case', () => {
   beforeEach(async () => {
     orgsRepository = new InMemoryOrgsRepository()
     petsRepository = new InMemoryPetsRepository(orgsRepository)
-    sut = new SearchAvailablePetsUseCase(petsRepository)
+    sut = new SearchAvailableUseCase(petsRepository)
 
     await orgsRepository.create({
       id: 'org-01',

@@ -5,7 +5,7 @@ import { OrgsRepository } from '@/repositories/orgs-repository'
 
 import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
 
-interface RegisterOrgUseCaseRequest {
+interface RegisterUseCaseRequest {
   title: string
   phone: string
   password: string
@@ -15,11 +15,11 @@ interface RegisterOrgUseCaseRequest {
   city: string
 }
 
-interface RegisterOrgUseCaseResponse {
+interface RegisterUseCaseResponse {
   org: Org
 }
 
-export class RegisterOrgUseCase {
+export class RegisterUseCase {
   constructor(private readonly orgsRepository: OrgsRepository) {}
 
   async execute({
@@ -30,7 +30,7 @@ export class RegisterOrgUseCase {
     address,
     uf,
     city,
-  }: RegisterOrgUseCaseRequest): Promise<RegisterOrgUseCaseResponse> {
+  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
     const orgAlreadyExists = await this.orgsRepository.findByPhone(phone)
 
     if (orgAlreadyExists) {
