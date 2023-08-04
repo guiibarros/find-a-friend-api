@@ -14,6 +14,7 @@ export interface QueryParams {
 }
 
 export interface PetsRepository {
+  findById(id: string): Promise<Pet | null>
   searchManyByLocation(
     location: LocationParams,
     query: QueryParams,
