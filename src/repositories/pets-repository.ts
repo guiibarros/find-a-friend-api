@@ -18,6 +18,7 @@ export interface PetsRepository {
   searchManyByLocation(
     location: LocationParams,
     query: QueryParams,
+    page: number,
   ): Promise<Pet[]>
   create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
   save(pet: Pet): Promise<Pet>
