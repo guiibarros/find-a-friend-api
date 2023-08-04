@@ -23,7 +23,7 @@ describe('Register pet use case', () => {
       title: 'Cãopanheiros',
       phone: '999999999',
       password_hash: '123456',
-      cep: '13254000',
+      postal_code: '13254000',
       address: 'Rua do meio - 123, Boa viagem',
       uf: 'PE',
       city: 'Recife',

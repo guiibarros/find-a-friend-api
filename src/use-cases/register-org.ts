@@ -9,7 +9,7 @@ interface RegisterOrgUseCaseRequest {
   title: string
   phone: string
   password: string
-  cep: string
+  postal_code: string
   address: string
   uf: string
   city: string
@@ -26,7 +26,7 @@ export class RegisterOrgUseCase {
     title,
     phone,
     password,
-    cep,
+    postal_code,
     address,
     uf,
     city,
@@ -43,7 +43,7 @@ export class RegisterOrgUseCase {
       title,
       phone,
       password_hash,
-      cep,
+      postal_code,
       address,
       uf,
       city,

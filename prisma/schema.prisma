@@ -56,10 +56,10 @@ model Org {
   phone         String @unique
   password_hash String
 
-  cep     String
-  address String
-  uf      String
-  city    String
+  postal_code String
+  address     String
+  uf          String
+  city        String
 
   pets Pet[]
 
