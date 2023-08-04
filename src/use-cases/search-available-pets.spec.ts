@@ -11,14 +11,13 @@ let orgsRepository: InMemoryOrgsRepository
 let sut: SearchAvailablePetsUseCase
 
 describe('Search available pets use case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     orgsRepository = new InMemoryOrgsRepository()
     petsRepository = new InMemoryPetsRepository(orgsRepository)
     sut = new SearchAvailablePetsUseCase(petsRepository)
-  })
 
-  it('should be able to fetch available pets in a city', async () => {
-    const org = await orgsRepository.create({
+    await orgsRepository.create({
+      id: 'org-01',
       title: 'Cãopanheiros',
       phone: '999999999',
       password_hash: '123456',
@@ -27,10 +26,12 @@ describe('Search available pets use case', () => {
       uf: 'PE',
       city: 'Recife',
     })
+  })
 
+  it('should be able to search available pets in a location', async () => {
     await petsRepository.create({
       name: 'Alfred',
-      about: 'puppy alfred',
+      about: 'puppy Alfred',
       age: 'PUPPY',
       size: 'SMALL',
       energy: 'HIGH',
@@ -38,12 +39,12 @@ describe('Search available pets use case', () => {
       independency: 'HIGH',
       imagesUrl: ['image-01.jpg'],
       requirements: ['Large place for the animal.'],
-      orgId: org.id,
+      orgId: 'org-01',
     })
 
     await petsRepository.create({
       name: 'Garfield',
-      about: 'puppy garfield',
+      about: 'puppy Garfield',
       age: 'PUPPY',
       size: 'SMALL',
       energy: 'HIGH',
@@ -51,7 +52,7 @@ describe('Search available pets use case', () => {
       independency: 'HIGH',
       imagesUrl: ['image-01.jpg'],
       requirements: ['Large place for the animal.'],
-      orgId: org.id,
+      orgId: 'org-01',
       adopted_at: new Date(),
     })
 
@@ -63,7 +64,51 @@ describe('Search available pets use case', () => {
     expect(pets).toEqual([
       expect.objectContaining({
         id: expect.any(String),
-        orgId: org.id,
+        name: 'Alfred',
+        adopted_at: null,
+      }),
+    ])
+  })
+
+  it('should be able to filter pets by user query', async () => {
+    await petsRepository.create({
+      name: 'Alfred',
+      about: 'puppy Alfred',
+      age: 'PUPPY',
+      size: 'SMALL',
+      energy: 'HIGH',
+      environment: 'LARGE',
+      independency: 'LOW',
+      imagesUrl: ['image-01.jpg'],
+      requirements: ['Large place for the animal.'],
+      orgId: 'org-01',
+    })
+
+    await petsRepository.create({
+      name: 'Garfield',
+      about: 'adolescent Garfield',
+      age: 'ADOLESCENT',
+      size: 'MEDIUM',
+      energy: 'LOW',
+      environment: 'LARGE',
+      independency: 'HIGH',
+      imagesUrl: ['image-01.jpg'],
+      requirements: ['Large place for the animal.'],
+      orgId: 'org-01',
+      adopted_at: null,
+    })
+
+    const { pets } = await sut.execute({
+      uf: 'PE',
+      city: 'Recife',
+      environment: 'LARGE',
+      age: 'ADOLESCENT',
+    })
+
+    expect(pets).toEqual([
+      expect.objectContaining({
+        id: expect.any(String),
+        name: 'Garfield',
         adopted_at: null,
       }),
     ])

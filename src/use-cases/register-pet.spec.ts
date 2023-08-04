@@ -31,7 +31,7 @@ describe('Register pet use case', () => {
 
     const { pet } = await sut.execute({
       name: 'Alfred',
-      about: 'puppy alfred',
+      about: 'puppy Alfred',
       age: 'PUPPY',
       size: 'SMALL',
       energy: 'HIGH',
@@ -49,7 +49,7 @@ describe('Register pet use case', () => {
     await expect(() =>
       sut.execute({
         name: 'Alfred',
-        about: 'puppy alfred',
+        about: 'puppy Alfred',
         age: 'PUPPY',
         size: 'SMALL',
         energy: 'HIGH',

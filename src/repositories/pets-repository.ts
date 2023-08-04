@@ -1,6 +1,22 @@
-import { Pet, Prisma } from '@prisma/client'
+import { Age, Pet, Rate, Size, Prisma } from '@prisma/client'
+
+export interface LocationParams {
+  uf: string
+  city: string
+}
+
+export interface QueryParams {
+  age?: Age
+  size?: Size
+  energy?: Rate
+  independency?: Rate
+  environment?: Size
+}
 
 export interface PetsRepository {
-  findManyByCity(uf: string, city: string): Promise<Pet[]>
+  searchManyByLocation(
+    location: LocationParams,
+    query: QueryParams,
+  ): Promise<Pet[]>
   create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
 }

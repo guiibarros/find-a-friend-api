@@ -1,7 +1,7 @@
 import { Pet, Prisma } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
 
-import { PetsRepository } from '../pets-repository'
+import { PetsRepository, LocationParams, QueryParams } from '../pets-repository'
 import { InMemoryOrgsRepository } from './in-memory-orgs-repository'
 
 export class InMemoryPetsRepository implements PetsRepository {
@@ -9,21 +9,29 @@ export class InMemoryPetsRepository implements PetsRepository {
 
   constructor(private readonly orgsRepository: InMemoryOrgsRepository) {}
 
-  async findManyByCity(uf: string, city: string) {
+  async searchManyByLocation(location: LocationParams, query: QueryParams) {
     const orgs = this.orgsRepository.items.filter(
-      (org) => org.uf === uf && org.city === city,
+      (org) => org.uf === location.uf && org.city === location.city,
     )
 
     const pets = this.items.filter((pet) => {
       return orgs.some((org) => org.id === pet.orgId) && !pet.adopted_at
     })
 
-    return pets
+    const filteredPets = pets.filter((pet) => {
+      return Object.entries(query).every((item) => {
+        const [key, value] = item as [keyof QueryParams, string]
+
+        return pet[key] === value
+      })
+    })
+
+    return filteredPets.length > 0 ? filteredPets : pets
   }
 
   async create(data: Prisma.PetUncheckedCreateInput) {
     const pet: Pet = {
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       name: data.name,
       about: data.about,
       age: data.age,
