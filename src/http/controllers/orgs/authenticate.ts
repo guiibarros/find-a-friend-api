@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
-import { OrgAlreadyExistsError } from '@/use-cases/errors/org-already-exists-error'
 import { makeAuthenticateUseCase } from '@/use-cases/factories/make-authenticate-use-case'
 
 export async function authenticate(
@@ -10,7 +9,7 @@ export async function authenticate(
   reply: FastifyReply,
 ) {
   const authenticateBodySchema = z.object({
-    phone: z.string(),
+    phone: z.string().min(8),
     password: z.string().min(6),
   })
 
