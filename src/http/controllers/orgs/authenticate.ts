@@ -23,8 +23,17 @@ export async function authenticate(
       password,
     })
 
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: org.id,
+        },
+      },
+    )
+
     return reply.send({
-      org,
+      token,
     })
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
