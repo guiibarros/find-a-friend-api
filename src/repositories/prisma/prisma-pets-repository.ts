@@ -26,6 +26,7 @@ export class PrismaPetsRepository implements PetsRepository {
           uf: location.uf,
           city: location.city,
         },
+        ...query,
       },
       take: 20,
       skip: (page - 1) * 20,
