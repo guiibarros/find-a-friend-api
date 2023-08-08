@@ -32,9 +32,9 @@ export async function authenticate(
       },
     )
 
-    return reply.send({
+    return {
       token,
-    })
+    }
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return reply.status(401).send({
