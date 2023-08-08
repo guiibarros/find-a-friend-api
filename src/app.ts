@@ -1,7 +1,9 @@
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
 import fastifyMultipart from '@fastify/multipart'
+import fastifyStatic from '@fastify/static'
 import fastify from 'fastify'
+import { resolve } from 'node:path'
 import { ZodError } from 'zod'
 
 import { env } from './env'
@@ -11,6 +13,11 @@ import { petsRoutes } from './http/routes/pets'
 export const app = fastify()
 
 app.register(fastifyMultipart)
+
+app.register(fastifyStatic, {
+  root: resolve(__dirname, '..', 'uploads'),
+  prefix: '/uploads',
+})
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
