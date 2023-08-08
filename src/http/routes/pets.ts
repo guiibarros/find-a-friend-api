@@ -4,6 +4,7 @@ import { adoption } from '../controllers/pets/adoption'
 import { profile } from '../controllers/pets/profile'
 import { registerPet } from '../controllers/pets/register-pet'
 import { search } from '../controllers/pets/search'
+import { upload } from '../controllers/pets/upload'
 import { verifyJWT } from '../middlewares/verify-jwt'
 
 export async function petsRoutes(app: FastifyInstance) {
@@ -12,5 +13,6 @@ export async function petsRoutes(app: FastifyInstance) {
 
   // Authenticated routes
   app.patch('/pets/:petId/adoption', { onRequest: [verifyJWT] }, adoption)
+  app.post('/pets/images/upload', { onRequest: [verifyJWT] }, upload)
   app.post('/pets', { onRequest: [verifyJWT] }, registerPet)
 }
