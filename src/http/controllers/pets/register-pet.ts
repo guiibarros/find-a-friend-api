@@ -19,7 +19,6 @@ export async function registerPet(
     environment: z.nativeEnum(Size),
     imagesUrl: z.array(z.string()),
     requirements: z.array(z.string()),
-    orgId: z.string().uuid(),
   })
 
   const {
@@ -32,7 +31,6 @@ export async function registerPet(
     environment,
     imagesUrl,
     requirements,
-    orgId,
   } = registerPetBodySchema.parse(request.body)
 
   try {
@@ -48,7 +46,7 @@ export async function registerPet(
       environment,
       imagesUrl,
       requirements,
-      orgId,
+      orgId: request.user.sub,
     })
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
