@@ -5,7 +5,7 @@ import { app } from '@/app'
 import { prisma } from '@/lib/prisma'
 import { createAndAuthenticateOrg } from '@/utils/test/create-and-authenticate-org'
 
-describe('Get pet profile (e2e)', () => {
+describe('Search pets (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -14,12 +14,12 @@ describe('Get pet profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get a pet profile', async () => {
+  it('should be able to search available pets in a location', async () => {
     await createAndAuthenticateOrg(app)
 
     const org = await prisma.org.findFirstOrThrow()
 
-    const pet = await prisma.pet.create({
+    await prisma.pet.create({
       data: {
         name: 'Alfred',
         about: 'puppy Alfred',
@@ -34,13 +34,19 @@ describe('Get pet profile (e2e)', () => {
       },
     })
 
-    const response = await request(app.server).get(`/pets/${pet.id}`).send()
+    const response = await request(app.server)
+      .get('/pets/search')
+      .query({
+        uf: 'SP',
+        city: 'São Paulo',
+      })
+      .send()
 
     expect(response.statusCode).toEqual(200)
-    expect(response.body.pet).toEqual(
+    expect(response.body.pets).toEqual([
       expect.objectContaining({
         name: 'Alfred',
       }),
-    )
+    ])
   })
 })
