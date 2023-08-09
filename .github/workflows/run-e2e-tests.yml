@@ -1,0 +1,36 @@
+name: Run E2E tests
+
+on: [pull_request]
+
+jobs:
+  run-e2e-tests:
+    name: Run E2E tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: bitnami/postgresql
+        env:
+          POSTGRES_USERNAME: docker
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DATABASE: find-a-friend-pg
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          DATABASE_URL: "postgresql://docker:docker@localhost:5432/find-a-friend-pg?schema=public"
+          JWT_SECRET: testing
