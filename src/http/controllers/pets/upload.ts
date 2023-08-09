@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyRequest } from 'fastify'
 import { randomUUID } from 'node:crypto'
 import { createWriteStream } from 'node:fs'
 import { extname, resolve } from 'node:path'
@@ -7,7 +7,7 @@ import { promisify } from 'node:util'
 
 const pump = promisify(pipeline)
 
-export async function upload(request: FastifyRequest, reply: FastifyReply) {
+export async function upload(request: FastifyRequest) {
   const images = request.files()
 
   const imagesUrl = []
