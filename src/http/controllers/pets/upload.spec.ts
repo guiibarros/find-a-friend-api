@@ -1,3 +1,4 @@
+import { unlink } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -24,9 +25,15 @@ describe('Upload (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
       .attach('images', petImageURL)
 
-    console.log(response.body)
-
     expect(response.statusCode).toEqual(200)
     expect(response.body.imagesUrl).toEqual([expect.stringContaining('http')])
+
+    await unlink(
+      resolve(
+        process.cwd(),
+        'uploads',
+        response.body.imagesUrl[0].split('/').at(-1),
+      ),
+    )
   })
 })
